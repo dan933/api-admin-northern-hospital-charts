@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/dan933/api-admin-northern-hospital#readme",
   "dependencies": {
+    "dotenv": "^10.0.0",
+    "env-cmd": "^10.1.0",
     "express": "^4.17.1",
     "pg": "^8.6.0"
   }
