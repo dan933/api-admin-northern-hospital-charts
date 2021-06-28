@@ -1,0 +1,24 @@
+{
+  "name": "api-admin-northern-hospital",
+  "version": "1.0.0",
+  "description": "This API connects the patient data from the database to the FE so it is accessable to doctors and nurses.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dan933/api-admin-northern-hospital.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dan933/api-admin-northern-hospital/issues"
+  },
+  "homepage": "https://github.com/dan933/api-admin-northern-hospital#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "pg": "^8.6.0"
+  }
+}
