@@ -1,16 +1,7 @@
-const dotenv = require('dotenv');
-dotenv.config();
-const Pool = require('pg').Pool
-const pool = new Pool({
-  user: process.env.USER,
-  host: process.env.HOST,
-  database: process.env.DATABASE,
-  password: process.env.PASSWORD,
-  port: process.env.PORT,
-})
+let db = require('./db-config')
 
 const getUsers = (request, response) => {
-    pool.query('SELECT * FROM patients', (error, results) => {
+    db.pool.query('SELECT * FROM patients', (error, results) => {
       if (error) {
         throw error
       }
