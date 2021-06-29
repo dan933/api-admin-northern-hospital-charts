@@ -25,9 +25,16 @@ const getPatientById = (request, response) => {
     })
 }
 
+//TODO search for patient by name
+//TODO pagination
+//https://bezkoder.com/node-js-pagination-postgresql/
+
 // test endpoint
 const test = (request, response) => {
     response.json({ info: 'Node.js, Express, and Postgres API' })
   };
 
-  module.exports = {patients, test, getPatientById};
+  module.exports = {
+    patients, test, 
+    getPatientById
+};
