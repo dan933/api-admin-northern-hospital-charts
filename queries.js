@@ -1,6 +1,8 @@
+//Gets Database configuration from db-config.js
 let db = require('./db-config')
 
-const getUsers = (request, response) => {
+// A SQL query that gets all patients from the SQL Database and displays the data in a Json format.
+const getPatients = (request, response) => {
     db.pool.query('SELECT * FROM patients', (error, results) => {
       if (error) {
         throw error
@@ -9,7 +11,8 @@ const getUsers = (request, response) => {
     })
   }
 
+  //Exports endpoints to other modules for use.
   module.exports = {
-    getUsers
+    getPatients
   }
 
