@@ -1,5 +1,5 @@
 //Gets Database configuration from db-config.js
-const { request, response } = require('express')
+const { request, response, urlencoded } = require('express')
 let db = require('../db-config')
 
 
@@ -14,18 +14,40 @@ const patients = (request, response) => {
   }
 
 //get patient by id
-const getPatientById = (request, response) => {
-    const id = parseInt(request.params.id)
+let getPatientById = (req, res) => {
 
-    db.pool.query(`SELECT * FROM patients WHERE patienthospitalnumber = ${id}`, (error,results) => {
+    //Convert to Number
+    let id = parseInt(req.params.id)
+
+    //error check for NaN values
+    if (isNaN(id)) {id = 0}
+
+    //Run Query
+    db.pool.query(`SELECT * FROM patients WHERE patienthospitalnumber = ${id};`, (error,results) => {
         if (error) {
             throw error
         }
-        response.status(200).json(results.rows)
+        res.status(200).json(results.rows)
     })
 }
 
-//TODO search for patient by name
+//search for patient by name
+const searchPatient =  (req, res) => {
+  const name = req.params.name
+
+  db.pool.query(`SELECT * FROM patients WHERE (firstname||' '||surname) LIKE '%${name}%' ORDER BY surname;`,
+   (error, results) => {
+    if (error) {
+      throw error
+    }
+    res.status(200).json(results.rows)
+  });
+  
+  
+}
+
+//TODO error checking
+
 //TODO pagination
 //https://bezkoder.com/node-js-pagination-postgresql/
 
@@ -36,5 +58,6 @@ const test = (request, response) => {
 
   module.exports = {
     patients, test, 
-    getPatientById
+    getPatientById,
+    searchPatient
 };
