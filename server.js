@@ -1,4 +1,5 @@
-// https://bezkoder.com/node-express-sequelize-postgresql/#Demo_Video
+// source: https://bezkoder.com/node-express-sequelize-postgresql/#Demo_Video
+//https://bezkoder.com/node-js-pagination-postgresql/
 const express = require("express");
 const cors = require("cors");
 

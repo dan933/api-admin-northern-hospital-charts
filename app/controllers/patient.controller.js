@@ -1,13 +1,20 @@
 const db = require("../models");
 
+//pagination module
+const pagination = require("../services/pagination");
+
 const Patient = db.patients;
 const Op = db.Sequelize.Op;
 
+
 // Retrieve all Patients from the database.
 exports.findAll = (req, res) => {
-   Patient.findAll()
+   const { page, size } = req.query; 
+   const { limit, offset } = pagination.getPagination(page, size);
+   Patient.findAndCountAll({limit,offset})
   .then(data => {
-      res.send(data);
+    const response = pagination.getPagingData(data, page, limit);
+      res.send(response);
   })
   .catch(err => {
       res.status(500).send({
@@ -30,11 +37,14 @@ exports.findOne = (req, res) => {
         });
       });
   };
-
+  
   exports.search = (req, res) => {
       const name = req.params.name;
-      Patient.findAll({
-        where:{
+      const { page, size } = req.query; 
+      const { limit, offset } = pagination.getPagination(page, size);
+      Patient.findAndCountAll({
+        limit,offset,    
+        where:{            
             [Op.or]:[
                 {
                     firstname:{
@@ -45,12 +55,12 @@ exports.findOne = (req, res) => {
                     surname:{
                         [Op.like]:`${name}%`
                     }
-                }]
-                
+                }]                           
             }
         })
       .then(data => {
-        res.send(data);
+        const response = pagination.getPagingData(data, page, limit);
+        res.send(response);
     })
     .catch(err => {
         res.status(500).send({
