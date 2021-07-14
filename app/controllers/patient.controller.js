@@ -37,9 +37,11 @@ exports.findOne = (req, res) => {
         });
       });
   };
+
   
   exports.search = (req, res) => {
       const name = req.params.name;
+      console.log(name)
       const { page, size } = req.query; 
       const { limit, offset } = pagination.getPagination(page, size);
       Patient.findAndCountAll({

@@ -13,8 +13,18 @@ module.exports = app => {
   //Search for patients
   router.get("/search/:name", patients.search);
 
+  // //Get an overview of all patients
+  // router.get("/overview/all", overview.find);
+
   //Get an overview of all patients
-  router.get("/overview/id/:id", overview.findAll);
+  router.get("/overview/all", overview.find);
+
+
+
+  //Get an overview of all single patient
+  router.get("/overview/id/:id", overview.findPatient);
+
+  
 
   app.use('/api/patients', router);
 };
