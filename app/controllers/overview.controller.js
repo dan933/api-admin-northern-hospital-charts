@@ -8,11 +8,51 @@ const pagination = require("../services/pagination");
 const Overview = db.overview;
 const Op = db.Sequelize.Op;
 
+
 // exports.find = (req, res) => {
 //     const { page, size } = req.query;
+//     let {searchPatienthospitalnumber, searchSurname, searchFirstName, searchQuestionId, searchPainMeasure,searchd1,searchd2} = req.query;
+//     console.log(searchPatienthospitalnumber)
 //     const { limit, offset } = pagination.getPagination(page, size);
+
+//     const columnArray = ['patienthospitalnumber', 'surname', 'firstname', 'question_id', 'painmeasure', 'd1', 'd2']
+    
+
+//     searchSurname = searchSurname === undefined ? '':searchSurname
+    
 //     Overview.findAndCountAll({
-//         attributes:['patienthospitalnumber', 'surname', 'firstname', 'question_id', 'painmeasure', 'd1', 'd2'],
+//         attributes:columnArray,
+//         where:{ 
+//             [Op.and]: [
+//                 //source https://stackoverflow.com/questions/47212187/sequelize-cast-column-to-integer-in-where-clause
+//                 //endpoint url http://localhost:3000/api/overview?searchPatienthospitalnumber=&searchSurname=&searchFirstName=&searchQuestionId=&searchPainMeasure=&searchd1=&searchd2=&size=30
+//                 sequelize.where(
+//                     sequelize.cast(sequelize.col('patienthospitalnumber'),'varchar'),
+//                     {[Op.iLike]:`${searchPatienthospitalnumber}%`}
+//                 ),
+//                 { 'surname':{[Op.iLike]:`${searchSurname}%` }},
+//                 { 'firstname':{[Op.iLike]:`${searchFirstName}%` }},
+//                 sequelize.where(
+//                     sequelize.cast(sequelize.col('question_id'),'varchar'),
+//                     {[Op.iLike]:`${searchQuestionId}%`}
+//                 ),
+//                 sequelize.where(
+//                     sequelize.cast(sequelize.col('painmeasure'),'varchar'),
+//                     {[Op.iLike]:`${searchPainMeasure}%`}
+//                 ),
+//                 sequelize.where(
+//                     sequelize.cast(sequelize.col('d1'),'varchar'),
+//                     {[Op.iLike]:`${searchd1}%`}
+//                 ),
+//                 sequelize.where(
+//                     sequelize.cast(sequelize.col('d2'),'varchar'),
+//                     {[Op.iLike]:`${searchd2}%`}
+//                 )
+//             ]
+//         },
+//         order:[
+//             ['patienthospitalnumber','ASC']
+//         ],
 //         limit,
 //         offset
 //     })
@@ -27,10 +67,16 @@ const Op = db.Sequelize.Op;
 //         });
 //     });
 // };
+
+
 exports.find = (req, res) => {
     const { page, size } = req.query;
+    const sort = req.params.sort;
+    const ascDesc = req.params.ascDesc === 'true' ? 'ASC':'DESC';
+
     let {searchPatienthospitalnumber, searchSurname, searchFirstName, searchQuestionId, searchPainMeasure,searchd1,searchd2} = req.query;
-    console.log(searchPatienthospitalnumber)
+    
+
     const { limit, offset } = pagination.getPagination(page, size);
 
     const columnArray = ['patienthospitalnumber', 'surname', 'firstname', 'question_id', 'painmeasure', 'd1', 'd2']
@@ -43,12 +89,13 @@ exports.find = (req, res) => {
         where:{ 
             [Op.and]: [
                 //source https://stackoverflow.com/questions/47212187/sequelize-cast-column-to-integer-in-where-clause
+                //endpoint url http://localhost:3000/api/overview/question_id/1?searchPatienthospitalnumber=&searchSurname=&searchFirstName=&searchQuestionId=&searchPainMeasure=&searchd1=&searchd2=&size=200
                 sequelize.where(
                     sequelize.cast(sequelize.col('patienthospitalnumber'),'varchar'),
                     {[Op.iLike]:`${searchPatienthospitalnumber}%`}
                 ),
                 { 'surname':{[Op.iLike]:`${searchSurname}%` }},
-                { firstname:{[Op.iLike]:`${searchFirstName}%` }},
+                { 'firstname':{[Op.iLike]:`${searchFirstName}%` }},
                 sequelize.where(
                     sequelize.cast(sequelize.col('question_id'),'varchar'),
                     {[Op.iLike]:`${searchQuestionId}%`}
@@ -68,7 +115,7 @@ exports.find = (req, res) => {
             ]
         },
         order:[
-            ['patienthospitalnumber','ASC']
+            [sort,ascDesc]
         ],
         limit,
         offset
