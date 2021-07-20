@@ -28,7 +28,9 @@ db.sequelize.sync();
 //   console.log("Drop and re-sync db.");
 // });
 
-require("./app/routes/patient.routes")(app);
+app.use('/api/overview', require('./app/routes/overview.routes'));
+app.use('/api/patients', require('./app/routes/patient.routes'));
+
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3000;
