@@ -28,6 +28,9 @@ module.exports = (sequelize, Sequelize) => {
 	d2:{
 		type:Sequelize.INTEGER
 		}
+    },
+    {
+        freezeTableName: true
     });
     return Overview;
 };

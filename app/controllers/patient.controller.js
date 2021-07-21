@@ -7,6 +7,8 @@ const pagination = require("../services/pagination");
 const Patient = db.patients;
 const Op = db.Sequelize.Op;
 
+
+//Search base on column filters
 exports.filter = ( req, res ) => {
   const { page, size } = req.query;
   const sort = req.params.sort;
@@ -76,7 +78,7 @@ exports.filter = ( req, res ) => {
   });
 };
 
-
+//Search by id
 exports.findOne = (req, res) => {
     const id = req.params.id;
   
@@ -90,36 +92,3 @@ exports.findOne = (req, res) => {
         });
       });
   };
-   
-  exports.search = (req, res) => {
-      const name = req.params.name;
-      console.log(name)
-      const { page, size } = req.query; 
-      const { limit, offset } = pagination.getPagination(page, size);
-      Patient.findAndCountAll({
-        limit,offset,    
-        where:{            
-            [Op.or]:[
-                {
-                    firstname:{
-                        [Op.like]: `${name}%`
-                    }
-                },
-                {
-                    surname:{
-                        [Op.like]:`${name}%`
-                    }
-                }]                           
-            }
-        })
-      .then(data => {
-        const response = pagination.getPagingData(data, page, limit);
-        res.send(response);
-    })
-    .catch(err => {
-        res.status(500).send({
-            message:
-            err.message || "some error occurred while retrieving patients."
-        });
-    })
-}

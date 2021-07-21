@@ -22,5 +22,6 @@ db.sequelize = sequelize;
 
 db.patients = require("./patient.model.js")(sequelize, Sequelize);
 db.overview = require("./overview.model.js")(sequelize,Sequelize);
+db.anxiety = require("./anxiety.model.js")(sequelize,Sequelize);
 
 module.exports = db;
