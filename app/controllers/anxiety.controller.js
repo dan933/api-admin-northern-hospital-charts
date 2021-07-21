@@ -13,16 +13,25 @@ exports.find = ( req, res) => {
     const { page, size } = req.query;
     const { limit, offset } = pagination.getPagination( page, size );
 
+    const { startDate } = req.query;
+
     const id = req.params.id;
     console.log(id)
 
+    const endDate = "2020-07-30"
+    // const endDate = new Date (Date.now());
+    // console.log(endDate.toISOString())
 
     const columnArray = ['d1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'questionare_date']
 
     Anxiety.findAndCountAll({
         attributes:columnArray,
         where: {
-            'patienthospitalnumber_id': {[Op.eq]: id}            
+            [Op.and]:[
+                {'patienthospitalnumber_id': {[Op.eq]: id}},
+                {'questionare_date': {[Op.between]: [startDate, endDate ]}}
+            ]
+                       
         },
         limit,
         offset
