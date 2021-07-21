@@ -11,12 +11,19 @@ const Op = db.Sequelize.Op;
 exports.find = ( req, res) => {
 
     const { page, size } = req.query;
-
     const { limit, offset } = pagination.getPagination( page, size );
+
+    const id = req.params.id;
+    console.log(id)
+
+
     const columnArray = ['d1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'questionare_date']
 
     Anxiety.findAndCountAll({
         attributes:columnArray,
+        where: {
+            'patienthospitalnumber_id': {[Op.eq]: id}            
+        },
         limit,
         offset
     })

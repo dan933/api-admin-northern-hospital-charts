@@ -2,8 +2,13 @@ const { sequelize, Sequelize } = require(".");
 
 module.exports = (sequelize, Sequelize) => {
     const Anxiety = sequelize.define("anxiety", {
+        patienthospitalnumber_id: {
+            type: Sequelize.INTEGER,
+            allowNull: true            
+        },
+        
         d1:{
-            type:Sequelize.INTEGER,
+            type: Sequelize.INTEGER,
             allowNull: true
         },
         d2:{
