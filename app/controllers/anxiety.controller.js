@@ -17,7 +17,7 @@ exports.find = ( req, res) => {
 
     const id = req.params.id;
 
-    const endDate = "2050-07-30"
+    const endDate = "2025-06-09"
     // const endDate = new Date (Date.now());
     // console.log(endDate.toISOString())
 
