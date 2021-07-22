@@ -13,7 +13,7 @@ exports.find = ( req, res) => {
     const sort = req.params.sort;
     const ascDesc = req.params.ascDesc === 'true' ? 'ASC':'DESC';
 
-    const { startDate } = req.query;
+    const { startDate, select } = req.query;
 
     const id = req.params.id;
 
@@ -21,7 +21,7 @@ exports.find = ( req, res) => {
     // const endDate = new Date (Date.now());
     // console.log(endDate.toISOString())
 
-    const columnArray = ['d1','questionare_date']
+    const columnArray = [ `${select}`,'questionare_date']
 
     Anxiety.findAll({
         attributes:columnArray,
