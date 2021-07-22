@@ -21,7 +21,7 @@ exports.find = ( req, res) => {
     // const endDate = new Date (Date.now());
     // console.log(endDate.toISOString())
 
-    const columnArray = ['d1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'questionare_date']
+    const columnArray = ['d1','questionare_date']
 
     Anxiety.findAll({
         attributes:columnArray,
