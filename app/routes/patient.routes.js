@@ -1,8 +1,11 @@
     const patients = require("../controllers/patient.controller.js");
     let router = require("express").Router();
 
-  // Retrieve a single Patient with id
+  // Retrieve a single Patient with id all Information
   router.get("/id/:id", patients.findOne);
+
+  //Get Patient Name
+  router.get("/name/id/:id", patients.getName)
 
   //Filter Patients based on patient detail columns
   router.get("/filter/:sort/:ascDesc", patients.filter);

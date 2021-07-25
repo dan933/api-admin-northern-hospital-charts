@@ -92,3 +92,29 @@ exports.findOne = (req, res) => {
         });
       });
   };
+
+  exports.getName = (req, res) => {
+    const id = req.params.id;
+    const columnArray = ['surname', 'firstname']
+
+    Patient.findAll ({
+      attributes:columnArray,
+      where:{
+        [Op.and]:[
+          sequelize.where(
+            sequelize.cast(sequelize.col('patienthospitalnumber'),'varchar'),
+            {[Op.eq]:`${id}`}
+          )
+        ]
+      }
+    }).then(data => {
+      res.send(data)
+    })
+    .catch(err => {
+      res.status(500).send({
+          message:
+          err.message || "some error occurred while retrieving patients."
+      });
+  });
+    
+  }
