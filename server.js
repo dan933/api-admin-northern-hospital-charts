@@ -31,6 +31,7 @@ db.sequelize.sync();
 app.use('/api/overview', require('./app/routes/overview.routes'));
 app.use('/api/patients', require('./app/routes/patient.routes'));
 app.use('/api/anxietydepression', require('./app/routes/anxiety.routes'));
+app.use('/api/painmeasure', require('./app/routes/painmeasure.routes'));
 
 
 // set port, listen for requests
