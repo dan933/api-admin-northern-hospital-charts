@@ -1,10 +1,15 @@
-const { sequelize, Sequelize } = require(".");
+
 
 module.exports = (sequelize, Sequelize) => {
     const Anxiety = sequelize.define("anxiety", {
         patienthospitalnumber_id: {
             type: Sequelize.INTEGER,
             allowNull: true            
+        },
+
+        questionare_date: {
+            type:Sequelize.DATE,
+            allowNull: true
         },
         
         d1:{
@@ -70,11 +75,8 @@ module.exports = (sequelize, Sequelize) => {
         a8:{
             type:Sequelize.INTEGER,
             allowNull: true
-        },
-        questionare_date: {
-            type:Sequelize.DATEONLY,
-            allowNull: false
         }
+        
     },
     {
         freezeTableName: true
