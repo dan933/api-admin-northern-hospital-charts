@@ -8,6 +8,8 @@ const pagination = require("../services/pagination");
 const Anxiety = db.anxiety;
 const Op = db.Sequelize.Op;
 
+
+//function for anxiety graphs data
 exports.find = ( req, res) => {
 
     const sort = req.params.sort;
@@ -44,3 +46,107 @@ exports.find = ( req, res) => {
     });
     
 };
+
+//function for anxiety table data
+exports.filter = (req, res) => {
+    const { page, size } = req.query;
+    const sort = req.params.sort;
+    const ascDesc = req.params.ascDesc === 'true' ? 'ASC':'DESC';
+    const { startDate, endDate } = req.query;
+    const id = req.params.id;
+
+    const {searchd1, searchd2, searchd3, searchd4, searchd5, searchd6, searchd7, searchd8, searcha1, searcha2, searcha3, searcha4, searcha5, searcha6, searcha7, searcha8} = req.query;
+
+    const { limit, offset } = pagination.getPagination( page, size );
+
+    const columnArray = ['questionare_date','d1','d2','d3','d4','d5','d6','d7','d8','a1','a2','a3','a4','a5','a6','a7','a8']
+
+    Anxiety.findAndCountAll({
+        attributes:columnArray,
+        where:{
+            [Op.and]:[
+                {'patienthospitalnumber_id': {[Op.eq]: id}},
+                {'questionare_date': {[Op.between]: [startDate, endDate ]}},
+                sequelize.where(
+                    sequelize.cast(sequelize.col('d1'),'varchar'),
+                    {[Op.iLike]:`${searchd1}%`}
+                ),
+                sequelize.where(
+                    sequelize.cast(sequelize.col('d2'),'varchar'),
+                    {[Op.iLike]:`${searchd2}%`}
+                ),
+                sequelize.where(
+                    sequelize.cast(sequelize.col('d3'),'varchar'),
+                    {[Op.iLike]:`${searchd3}%`}
+                ),
+                sequelize.where(
+                    sequelize.cast(sequelize.col('d4'),'varchar'),
+                    {[Op.iLike]:`${searchd4}%`}
+                ),
+                sequelize.where(
+                    sequelize.cast(sequelize.col('d5'),'varchar'),
+                    {[Op.iLike]:`${searchd5}%`}
+                ),
+                sequelize.where(
+                    sequelize.cast(sequelize.col('d6'),'varchar'),
+                    {[Op.iLike]:`${searchd6}%`}
+                ),
+                sequelize.where(
+                    sequelize.cast(sequelize.col('d7'),'varchar'),
+                    {[Op.iLike]:`${searchd7}%`}
+                ),
+                sequelize.where(
+                    sequelize.cast(sequelize.col('d8'),'varchar'),
+                    {[Op.iLike]:`${searchd8}%`}
+                ),
+                sequelize.where(
+                    sequelize.cast(sequelize.col('a1'),'varchar'),
+                    {[Op.iLike]:`${searcha1}%`}
+                ),
+                sequelize.where(
+                    sequelize.cast(sequelize.col('a2'),'varchar'),
+                    {[Op.iLike]:`${searcha2}%`}
+                ),
+                sequelize.where(
+                    sequelize.cast(sequelize.col('a3'),'varchar'),
+                    {[Op.iLike]:`${searcha3}%`}
+                ),
+                sequelize.where(
+                    sequelize.cast(sequelize.col('a4'),'varchar'),
+                    {[Op.iLike]:`${searcha4}%`}
+                ),
+                sequelize.where(
+                    sequelize.cast(sequelize.col('a5'),'varchar'),
+                    {[Op.iLike]:`${searcha5}%`}
+                ),
+                sequelize.where(
+                    sequelize.cast(sequelize.col('a6'),'varchar'),
+                    {[Op.iLike]:`${searcha6}%`}
+                ),
+                sequelize.where(
+                    sequelize.cast(sequelize.col('a7'),'varchar'),
+                    {[Op.iLike]:`${searcha7}%`}
+                ),
+                sequelize.where(
+                    sequelize.cast(sequelize.col('a8'),'varchar'),
+                    {[Op.iLike]:`${searcha8}%`}
+                )
+            ],            
+        },
+        order:[
+            [sort, ascDesc]
+        ],
+        limit,
+        offset
+    })
+    .then(data => {
+        const response = pagination.getAnxietyData(data,page,limit);
+        res.send(response);
+    })
+    .catch(err => {
+        res.status(500).send({
+            message:
+            err.message || "some error occurred while retrieving data."
+        });
+    })
+}
