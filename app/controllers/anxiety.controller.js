@@ -179,8 +179,26 @@ exports.download = (req, res ) => {
     })
     .then((objs) => {
         let data = [];
+        let date = '';
+        //dates
+        for( let row in objs)
+        {
+           objs[row].dataValues.questionare_date = new Date(objs[row].dataValues.questionare_date);
+           date = objs[row].dataValues.questionare_date
 
-        console.log(objs);
+            let day = date.getDate();
+            day = String(day)
+            day = day.length == 2 ? day : `0${day}`
+
+            let month = date.getMonth();
+            month = String(month + 1)
+            month = month.length == 2 ? month : `0${month}`
+
+            let year = date.getFullYear();
+
+            objs[row].dataValues.questionare_date = `${day}-${month}-${year}`
+        }
+        
 
         objs.forEach((obj) => {
         const { questionare_date, d1 , d2, d3, d4 , d5, d6, d7, d8, a1, a2, a3, a4, a5, a6, a7, a8 } = obj;
