@@ -1,5 +1,6 @@
 const { text } = require("express");
 const { sequelize } = require("../models");
+
 const db = require("../models");
 
 //pagination module
@@ -7,6 +8,9 @@ const pagination = require("../services/pagination");
 
 const Anxiety = db.anxiety;
 const Op = db.Sequelize.Op;
+
+const CsvParser = require("json2csv").Parser;
+
 
 
 //function for anxiety graphs data
@@ -150,3 +154,49 @@ exports.filter = (req, res) => {
         });
     })
 }
+
+
+//function to download anxiety data as csv
+exports.download = (req, res ) => {
+
+    const id = req.params.id;
+    const { startDate, endDate } = req.query;
+
+    
+    const columnArray = ['questionare_date','d1','d2','d3','d4','d5','d6','d7','d8','a1','a2','a3','a4','a5','a6','a7','a8']
+
+    Anxiety.findAll({
+        attributes:columnArray,
+        where:{
+            [Op.and]:[
+                {'patienthospitalnumber_id': {[Op.eq]: id}},
+                {'questionare_date': {[Op.between]: [startDate, endDate ]}}
+            ],            
+        },
+        order:[
+            ['questionare_date', 'DESC']
+        ]
+    })
+    .then((objs) => {
+        let data = [];
+
+        console.log(objs);
+
+        objs.forEach((obj) => {
+        const { questionare_date, d1 , d2, d3, d4 , d5, d6, d7, d8, a1, a2, a3, a4, a5, a6, a7, a8 } = obj;
+        data.push({ questionare_date, d1 , d2, d3, d4 , d5, d6, d7, d8, a1, a2, a3, a4, a5, a6, a7, a8 });
+    }); 
+
+    const columnArray = ['questionare_date','d1','d2','d3','d4','d5','d6','d7','d8','a1','a2','a3','a4','a5','a6','a7','a8'];
+    const csvParser = new CsvParser({ columnArray });
+    const csvData = csvParser.parse(data);
+
+    res.setHeader("Content-Type", "text/csv");
+    res.setHeader("Content-Disposition", "attachment; filename=tutorials.csv");
+
+    res.status(200).end(csvData);
+    
+    });
+
+};
+
