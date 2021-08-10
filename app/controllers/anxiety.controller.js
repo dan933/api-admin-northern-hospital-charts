@@ -144,7 +144,7 @@ exports.filter = (req, res) => {
         offset
     })
     .then(data => {
-        const response = pagination.getAnxietyData(data,page,limit);
+        const response = pagination.getPagingData(data,page,limit);
         res.send(response);
     })
     .catch(err => {
