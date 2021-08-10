@@ -6,15 +6,16 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.INTEGER,
             allowNull: true            
         },
+        questionare_date: {
+            type:Sequelize.DATE,
+            allowNull: false
+        },
         painmeasure: {
             type:Sequelize.INTEGER,
             allowNull: true
-        },
-
-        questionare_date: {
-            type:Sequelize.DATEONLY,
-            allowNull: false
         }
+        
+        
     },
     {
         freezeTableName: true

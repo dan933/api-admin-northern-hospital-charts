@@ -1,9 +1,12 @@
 const { text } = require("express");
-const { sequelize } = require("../models");
+const { sequelize, painmeasure } = require("../models");
 const db = require("../models");
 
 //pagination module
 const pagination = require("../services/pagination");
+
+//csv 
+const CsvParser = require("json2csv").Parser;
 
 const PainMeasure = db.painmeasure;
 const Op = db.Sequelize.Op;
@@ -84,3 +87,64 @@ exports.filter = (req, res) => {
         });
     })
 }
+
+//function to download painmeasure data as csv
+exports.download = (req, res ) => {
+
+    const id = req.params.id;
+    const { startDate, endDate } = req.query;
+
+    const columnArray = ['questionare_date','painmeasure']
+
+    PainMeasure.findAll({
+        attributes:columnArray,
+        where:{
+            [Op.and]:[
+                {'patienthospitalnumber_id': {[Op.eq]: id}},
+                {'questionare_date': {[Op.between]: [startDate, endDate]}}
+            ],            
+        },
+        order:[
+            ['questionare_date', 'DESC']
+        ]
+    })
+    .then((objs) => {
+        console.log(objs)
+        let data = [];
+        let date = '';
+
+        //dates
+        for( let row in objs)
+        {
+           objs[row].dataValues.questionare_date = new Date(objs[row].dataValues.questionare_date);
+           date = objs[row].dataValues.questionare_date
+
+            let day = date.getDate();
+            day = String(day)
+            day = day.length == 2 ? day : `0${day}`
+
+            let month = date.getMonth();
+            month = String(month + 1)
+            month = month.length == 2 ? month : `0${month}`
+
+            let year = date.getFullYear();
+
+            objs[row].dataValues.questionare_date = `${day}-${month}-${year}`
+        }
+        
+        objs.forEach((obj) => {
+        const { questionare_date, painmeasure} = obj;
+        data.push({ questionare_date, painmeasure});
+    }); 
+
+    const csvParser = new CsvParser({ columnArray });
+    const csvData = csvParser.parse(data);
+
+    res.setHeader("Content-Type", "text/csv");
+    res.setHeader("Content-Disposition", "attachment; filename=painMeasure.csv");
+
+    res.status(200).end(csvData);
+    
+    });
+
+};
