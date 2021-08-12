@@ -70,7 +70,7 @@ exports.filter = (req, res) => {
         where:{
             [Op.and]:[
                 {'patienthospitalnumber_id': {[Op.eq]: id}},
-                {'questionare_date': {[Op.between]: [startDate, endDate ]}},
+                {'questionare_date': {[Op.between]: [`${startDate} 00:00:00 +00:00`, `${endDate} 00:00:00 +00:00` ]}},
                 sequelize.where(
                     sequelize.cast(sequelize.col('d1'),'varchar'),
                     {[Op.iLike]:`${searchd1}%`}
