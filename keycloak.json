@@ -1,0 +1,10 @@
+{
+  "realm": "application",
+  "auth-server-url": "http://localhost:8080/auth/",
+  "ssl-required": "external",
+  "resource": "nh-api",
+  "credentials": {
+    "secret": "f52c4da6-cb93-4d9f-971d-4d477e45bb6b"
+  },
+  "confidential-port": 0
+}

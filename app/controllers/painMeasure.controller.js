@@ -108,8 +108,7 @@ exports.download = (req, res ) => {
             ['questionare_date', 'DESC']
         ]
     })
-    .then((objs) => {
-        console.log(objs)
+    .then((objs) => {    
         let data = [];
         let date = '';
 
