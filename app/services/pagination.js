@@ -1,4 +1,4 @@
-https://www.bezkoder.com/node-js-sequelize-pagination-mysql/
+//https://www.bezkoder.com/node-js-sequelize-pagination-mysql/
 module.exports.getPagination = (page, size) => {
     const limit = size >= 1 ? +size : 10;    
     const offset = page >= 0 ? page * limit : 0;
